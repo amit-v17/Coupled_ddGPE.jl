@@ -15,6 +15,16 @@ struct PumpSpatialProfile
     gauss_intensity::Array{Float64,2}
 end
 
+"""
+Construct the spatial pump intensity profile on the simulation grid.
+
+# Arguments
+- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
+- `grid::GridData`: spatial and momentum grid returned by `build_grid`.
+
+# Returns
+A `PumpSpatialProfile` containing the pump amplitude and intensity on the spatial grid.
+"""
 function pump_spatial_profile(derived::DerivedParameters, grid::GridData)::PumpSpatialProfile
 
     # Construct the Gaussian pump profile on the spatial grid
@@ -70,6 +80,17 @@ struct PumpTimeProfile
     No_points::Int
 end
 
+"""
+Compute the pump pulse time envelope and its sampled frequency representation.
+
+# Arguments
+- `config::Parameters`: simulation configuration.
+- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
+- `tdata::TimeData`: time-domain axes and sample metadata.
+
+# Returns
+A `PumpTimeProfile` containing the pulse waveform, sampled pulse, and computed spectrum.
+"""
 function pump_time_profile(config::Parameters, derived::DerivedParameters, tdata::TimeData)::PumpTimeProfile
     # Unpack time-domain data from TimeData
     t = tdata.t

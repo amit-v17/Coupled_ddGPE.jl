@@ -1,0 +1,3 @@
+[deps]
+Coupled_ddGPE = "dfeeaaa0-f624-4da5-94fe-2eaeb5663aa1"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"

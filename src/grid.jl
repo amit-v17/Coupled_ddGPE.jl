@@ -21,6 +21,16 @@ struct TimeData
     E_axis::Vector{Float64}
 end
 
+"""
+Build the temporal simulation axes used for evolution and frequency analysis.
+
+# Arguments
+- `config::Parameters`: simulation configuration.
+- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
+
+# Returns
+A `TimeData` object containing time, sample, frequency, and energy axes.
+"""
 function temporal_axes(config::Parameters, derived::DerivedParameters)::TimeData
 
     # Evolution Time Axis
@@ -84,6 +94,16 @@ struct GridData
     kym::Array{Float64,2}
 end
 
+"""
+Build the spatial and momentum grids for the simulation domain.
+
+# Arguments
+- `config::Parameters`: simulation configuration.
+- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
+
+# Returns
+A `GridData` object containing spatial coordinates, momentum coordinates, and grid spacing.
+"""
 function build_grid(config::Parameters, derived::DerivedParameters)::GridData
     L = ceil((maximum((derived.pump_sigma_x, derived.pump_sigma_y)) * config.spot_size)/100) * 100 # Appropriate Length of Grid dependent on spot size of pump
 

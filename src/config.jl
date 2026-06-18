@@ -69,6 +69,15 @@ Base.@kwdef struct DerivedParameters
     pump_y0::Float64
 end
 
+"""
+Convert physical `Parameters` into nondimensionalized simulation parameters.
+
+# Arguments
+- `config::Parameters`: physical simulation constants and pump settings.
+
+# Returns
+A `DerivedParameters` object with nondimensionalized length, time, and energy scales.
+"""
 function nondimensionalize(config::Parameters)::DerivedParameters
     r_0 = config.hbar * sqrt(1/(config.m_c * config.hbar_gamma_c * 1.6022e-22)) # Length scale
     sigma_t = 2/((config.hbar_sigma_e * 1.6022e-22)/(config.hbar)) # Time scale
