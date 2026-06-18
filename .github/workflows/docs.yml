@@ -21,5 +21,8 @@ jobs:
       - name: Cache packages
         uses: julia-actions/cache@v1
 
-      - name: Build and deploy docs
-        run: julia --project=docs -e 'using Pkg; Pkg.instantiate(); include("docs/make.jl")'
+      - name: Instantiate docs environment
+        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Build docs
+        run: julia --project=docs docs/make.jl
