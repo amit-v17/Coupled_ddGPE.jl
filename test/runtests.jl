@@ -1,7 +1,7 @@
 using Coupled_ddGPE
 using Test
 
-@testset "TMD_GPE basics" begin
+@testset "Basic functionality" begin
     params = default_config()
     @test isa(params, Parameters)
 
