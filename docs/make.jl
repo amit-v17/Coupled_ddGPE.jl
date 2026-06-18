@@ -1,7 +1,4 @@
 using Documenter
-using Pkg
-Pkg.develop(path=joinpath(@__DIR__, ".."))
-Pkg.instantiate()
 using Coupled_ddGPE
 
 makedocs(

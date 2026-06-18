@@ -22,7 +22,7 @@ jobs:
         uses: julia-actions/cache@v1
 
       - name: Instantiate docs environment
-        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+        run: julia --project=docs -e 'using Pkg; Pkg.develop(path=joinpath(@__DIR__, "..")); Pkg.instantiate()'
 
       - name: Build docs
         run: julia --project=docs docs/make.jl
