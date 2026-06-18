@@ -21,24 +21,5 @@ jobs:
       - name: Cache packages
         uses: julia-actions/cache@v1
 
-      - name: Install docs dependencies
-        run: |
-          cd docs
-          julia --project -e 'using Pkg; Pkg.instantiate()'
-
-      - name: Build docs
-        run: |
-          cd docs
-          julia --project make.jl
-
-      - name: Deploy docs
-        if: github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd docs
-          julia --project -e '
-            using Pkg;
-            Pkg.add("Documenter");
-            include("make.jl")
-          '
+      - name: Build and deploy docs
+        run: julia --project=docs -e 'using Pkg; Pkg.instantiate(); include("docs/make.jl")'
