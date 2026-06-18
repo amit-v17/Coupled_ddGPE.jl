@@ -109,7 +109,11 @@ function nondimensionalize(config::Parameters)::DerivedParameters
 end
 
 """
-Return the default `Parameters` instance used by the simulation.
+Creates and returns a `Parameters` object populated with sensible default physical and numerical
+settings (grid sizes, time window, pump parameters, coupling constants, dissipation rates, etc.).
+
+Usage notes:
+- Call this to start a simulation. Modify fields on the returned object to change the experiment.
 """
 function default_config()::Parameters
     return Parameters()
