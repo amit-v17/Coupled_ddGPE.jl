@@ -12,6 +12,6 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/amit-v17/Coupled_ddGPE.jl.git",
+    repo = "github.com/amit-v17/Coupled_ddGPE.jl",
     devbranch = "main",
 )
