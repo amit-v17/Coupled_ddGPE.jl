@@ -1,3 +1,5 @@
+push!(LOAD_PATH,"../src/")
+
 using Documenter
 using Coupled_ddGPE
 
@@ -12,6 +14,6 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/amit-v17/Coupled_ddGPE.jl",
+    repo = "github.com/amit-v17/Coupled_ddGPE.jl.git",
     devbranch = "main",
 )
