@@ -52,7 +52,20 @@ Base.@kwdef struct Parameters
 end
 
 """
-Nondimensionalized simulation parameters derived from a physical configuration.
+Nondimensionalized simulation parameters derived from physical constants.
+
+Fields
+- `r_0`: length scale in meters.
+- `sigma_t`: time scale in seconds.
+- `Omega`: Rabi frequency in dimensionless units.
+- `omega_x`: exciton energy in dimensionless units.
+- `Delta`: detuning in dimensionless units.
+- `gamma_x`: excitonic dissipation in dimensionless units.
+- `omega_0`: pump photon energy in dimensionless units.
+- `sigma_e`: pump linewidth in dimensionless units.
+- `pulse_width`: pulse width in dimensionless frequency units.
+- `pump_sigma_x`, `pump_sigma_y`: pump spot sizes in dimensionless units.
+- `pump_y0`: pump center position along y in dimensionless units.
 """
 Base.@kwdef struct DerivedParameters
     r_0::Float64
@@ -70,13 +83,13 @@ Base.@kwdef struct DerivedParameters
 end
 
 """
-Convert physical `Parameters` into nondimensionalized simulation parameters.
+Convert physical [`Parameters`](@ref) into nondimensionalized simulation parameters.
 
 # Arguments
-- `config::Parameters`: physical simulation constants and pump settings.
+- `config::Parameters`: A [`Parameters`](@ref) object containing physical simulation constants, Gaussian pump settings and numerical parameters.
 
 # Returns
-A `DerivedParameters` object with nondimensionalized length, time, and energy scales.
+A [`DerivedParameters`](@ref) object with nondimensionalized length, time, and energy scales.
 """
 function nondimensionalize(config::Parameters)::DerivedParameters
     r_0 = config.hbar * sqrt(1/(config.m_c * config.hbar_gamma_c * 1.6022e-22)) # Length scale
@@ -109,7 +122,7 @@ function nondimensionalize(config::Parameters)::DerivedParameters
 end
 
 """
-Creates and returns a `Parameters` object populated with sensible default physical and numerical
+Creates and returns a [`Parameters`](@ref) object populated with sensible default physical and numerical
 settings (grid sizes, time window, pump parameters, coupling constants, dissipation rates, etc.).
 
 Usage notes:

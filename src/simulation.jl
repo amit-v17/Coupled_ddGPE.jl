@@ -1,5 +1,8 @@
 """
-Propagate pump fields through the driven-dissipative GPE and compute input/output spectra.
+Propagate pump fields through the driven-dissipative GPE and compute input/output spectra spectrum. This is the core numerical routine. It advances the coupled GPEs in time, applies the pump source terms, and computes observables such as transmitted
+intensity spectrum. Internally it will use FFT-based spectral derivatives and a split-step method to evolve the coupled equations.
+Usage notes:
+- The routine may be parameter-sensitive: choose time-step and grid resolution to satisfy stability and accuracy for your problem.
 
 # Arguments
 - `config::Parameters`: simulation configuration and numeric constants.
@@ -13,7 +16,7 @@ Propagate pump fields through the driven-dissipative GPE and compute input/outpu
 - `config.g_s`: saturation interaction strength.
 
 # Returns
-- `Transmittivity::Matrix{Float64}` — the transmittivity values for a given pulse.
+- `Transmittivity::Matrix{Float64}` — the transmission intensity spectrum values for a given pulse.
 """
 function propagate_pump_spectrum(config::Parameters, 
     derived::DerivedParameters, 
@@ -94,12 +97,14 @@ end
 
 """
 Run the full driven dissipative GPE simulation.
+What it does: calls [`nondimensionalize`](@ref), [`temporal_axes`](@ref), [`build_grid`](@ref), [`pump_time_profile`](@ref),
+[`pump_spatial_profile`](@ref), and [`propagate_pump_spectrum`](@ref) in sequence and returns the collected outputs.
 
 # Arguments
 - `config::Parameters`: optional custom configuration. Defaults to `default_config()`.
 
 # Returns
-A named tuple containing `lsq_error_spectrum` and `lsq_error_spatial`.
+A named tuple containing the transmittivity spectrum and the energy axis in units of meV.
 """
 function run_simulation(config::Parameters = default_config())
     println("=" ^ 60)

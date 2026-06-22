@@ -1,13 +1,16 @@
 """
-Build time and frequency axes for the simulation.
+Build time and frequency axes structure for the simulation. 
 
-# Arguments
-- `config::Parameters`: Parameter values in physical units.
-- `derived`: nondimensionalized parameters returned by `nondimensionalize`.
-
-# Returns
-A `TimeData` instance containing the evolution time axis, sampled time axis,
-frequency axis, and dimensional energy axis.
+Fields:
+- `dt`: time step in dimensionless units.
+- `steps`: total number of time steps.
+- `t`: time axis vector in dimensionless units.
+- `init`: initial index for sampling.
+- `dt_sample`: sampling time step in dimensionless units.
+- `t_sample`: sampling time axis vector in dimensionless units.
+- `No_points`: number of sampling points.
+- `f`: frequency axis vector in dimensionless units.
+- `E_axis`: energy axis vector in dimensional units (meV).
 """
 struct TimeData
     dt::Float64
@@ -22,14 +25,14 @@ struct TimeData
 end
 
 """
-Build the temporal simulation axes used for evolution and frequency analysis.
+Build time and frequency axes for the simulation taking care of sampling and Fourier-related details for the pseudo-spectral solver.
 
 # Arguments
 - `config::Parameters`: simulation configuration.
 - `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
 
 # Returns
-A `TimeData` object containing time, sample, frequency, and energy axes.
+A [`TimeData`](@ref) object containing time, sample, frequency, and energy axes.
 """
 function temporal_axes(config::Parameters, derived::DerivedParameters)::TimeData
 
@@ -71,14 +74,18 @@ end
 """
 Build the spatial grid and momentum grid used in the simulation.
 
-# Arguments
-- `config::Parameters`: simulation configuration.
-- `derived`: nondimensionalized physical parameters.
-- `data`: experimental data loaded from files.
-- `tdata::TimeData`: time-domain axes and related quantities.
-
-# Returns
-A `GridData` instance containing the spatial grid, momentum grid, and index boundaries.
+Fields:
+- `L`: length of the grid in dimensionless units.
+- `dx`: spatial step size in x direction in dimensionless units.
+- `dy`: spatial step size in y direction in dimensionless units.
+- `x`: spatial coordinates in x direction in dimensionless units.
+- `y`: spatial coordinates in y direction in dimensionless units.
+- `xm`: 2D meshgrid of x coordinates in dimensionless units.
+- `ym`: 2D meshgrid of y coordinates in dimensionless units.
+- `kx`: momentum coordinates in x direction in dimensionless units.
+- `ky`: momentum coordinates in y direction in dimensionless units.
+- `kxm`: 2D meshgrid of momentum coordinates in x direction in dimensionless units.
+- `kym`: 2D meshgrid of momentum coordinates in y direction in dimensionless units.
 """
 struct GridData
     L::Float64
@@ -102,7 +109,7 @@ Build the spatial and momentum grids for the simulation domain.
 - `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
 
 # Returns
-A `GridData` object containing spatial coordinates, momentum coordinates, and grid spacing.
+A [`GridData`](@ref) object containing spatial coordinates, momentum coordinates, and grid spacing.
 """
 function build_grid(config::Parameters, derived::DerivedParameters)::GridData
     L = ceil((maximum((derived.pump_sigma_x, derived.pump_sigma_y)) * config.spot_size)/100) * 100 # Appropriate Length of Grid dependent on spot size of pump

@@ -1,14 +1,9 @@
 """
-Construct the Gaussian spatial pump profile for the driven GPE.
+Construct the Gaussian spatial pump profile object for the driven-dissipative GPE.
 
-# Arguments
-- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
-- `grid::GridData`: spatial and momentum grid returned by `build_grid`.
-
-# Returns
-`PumpSpatialProfile` with fields:
-- `gauss_pump::Array{Float64,2}`: Gaussian pump amplitude on the spatial grid.
-- `gauss_intensity::Array{Float64,2}`: Pump intensity |pump|^2 on the spatial grid.
+Fields:
+- `gauss_pump`: 2D array of the Gaussian pump amplitude on the spatial grid.
+- `gauss_intensity`: 2D array of the Gaussian pump intensity on the spatial grid.
 """
 struct PumpSpatialProfile
     gauss_pump::Array{Float64,2}
@@ -16,14 +11,14 @@ struct PumpSpatialProfile
 end
 
 """
-Construct the spatial pump intensity profile on the simulation grid.
+Construct the spatial pump intensity profile on the simulation grid. Constructs pump amplitude distribution across the spatial grid for a Gaussian pump beam, based on the configured pump waist and center position. The resulting profile is used to drive the system in the simulation.
 
 # Arguments
 - `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
 - `grid::GridData`: spatial and momentum grid returned by `build_grid`.
 
 # Returns
-A `PumpSpatialProfile` containing the pump amplitude and intensity on the spatial grid.
+A [`PumpSpatialProfile`](@ref) containing the pump amplitude and intensity on the spatial grid.
 """
 function pump_spatial_profile(derived::DerivedParameters, grid::GridData)::PumpSpatialProfile
 
@@ -55,21 +50,15 @@ function pump_amplitude(config::Parameters, derived::DerivedParameters)::Float64
 end
 
 """
-Generate the pump pulse time profile and its sampled / frequency representations.
+Generate the pump pulse time profile object and its sampled / frequency representations.
 
-# Arguments
-- `config::Parameters`: simulation configuration (physical units).
-- `derived::DerivedParameters`: nondimensionalized parameters returned by `nondimensionalize`.
-- `tdata::TimeData`: evolution time axes and sampling metadata.
-
-# Returns
-`PumpTimeProfile` with fields:
-- `pulse::Vector{Float64}`: full time-domain pulse evaluated on `t`.
-- `pulse_sample::Vector{Float64}`: downsampled pulse used for FFT.
-- `pulse_freq::Vector{Float64}`: magnitude of the pulse spectrum (abs of IFFT-shifted sample).
-- `t_sample::Vector{Float64}`: sampled time axis.
-- `dt_sample::Float64`: sampled time step.
-- `No_points::Int`: number of sampled points.
+Fields:
+- `pulse`: full time-domain pump pulse envelope.
+- `pulse_sample`: sampled time-domain pump pulse envelope.
+- `pulse_freq`: frequency-domain representation of the sampled pump pulse.
+- `t_sample`: sampled time axis vector in dimensionless units.
+- `dt_sample`: sampling time step in dimensionless units.
+- `No_points`: number of sampling points.
 """
 struct PumpTimeProfile
     pulse::Vector{Float64}
@@ -81,7 +70,8 @@ struct PumpTimeProfile
 end
 
 """
-Compute the pump pulse time envelope and its sampled frequency representation.
+Compute the pump pulse time envelope and its sampled frequency representation. Builds the time-dependent envelope of the external pump (pulse shape, chirp, duration,
+and frequency content). Use this to test different driving scenarios.
 
 # Arguments
 - `config::Parameters`: simulation configuration.
@@ -89,7 +79,7 @@ Compute the pump pulse time envelope and its sampled frequency representation.
 - `tdata::TimeData`: time-domain axes and sample metadata.
 
 # Returns
-A `PumpTimeProfile` containing the pulse waveform, sampled pulse, and computed spectrum.
+A [`PumpTimeProfile`](@ref) containing the pulse waveform, sampled pulse, and computed spectrum.
 """
 function pump_time_profile(config::Parameters, derived::DerivedParameters, tdata::TimeData)::PumpTimeProfile
     # Unpack time-domain data from TimeData

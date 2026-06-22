@@ -9,11 +9,11 @@ makedocs(
     modules = [Coupled_ddGPE],
     pages = [
         "Home" => "index.md",
-        "API" => "api.md",
+        "API Reference" => "api.md",
     ],
 )
 
 deploydocs(
     repo = "github.com/amit-v17/Coupled_ddGPE.jl.git",
-    devbranch = "main",
+    devbranch = "main"
 )
