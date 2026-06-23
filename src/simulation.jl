@@ -23,7 +23,7 @@ function propagate_pump_spectrum(config::Parameters,
     grid::GridData, 
     pump_spatial::PumpSpatialProfile, 
     tdata::TimeData, 
-    pump_time::PumpTimeProfile) :: Matrix{Float64}
+    pump_time::PumpTimeProfile) :: Vector{Float64}
 
     # Initialize wavefunctions, pump amplitude
     wf_e = complex.(config.seed .* exp.(-((grid.xm.^2 .+ grid.ym.^2)/(derived.pump_sigma_x^2))))
@@ -76,19 +76,22 @@ function propagate_pump_spectrum(config::Parameters,
 
     #------ Calculation of Transmission spectrum
 
+    lower_E = findlast(x -> x < config.hbar_omega_x - 30, tdata.E_axis)
+    upper_E = findfirst(x -> x > config.hbar_omega_x + 30, tdata.E_axis)
+
     # Calculation of Input Spectrum of the Pump along the x-direction at the center of the grid
     spectrum_pump = Array{Float64,2}(undef, config.N, tdata.No_points)
     for i=1:config.N
         spectrum_pump[i,:] = (abs.(pump_time.pulse_freq.* pump_spatial.gauss_pump[i, div(config.N, 2) + 1].*amp)).^2
     end
-    A_in_2 = copy(spectrum_pump)
+    A_in_2 = spectrum_pump[div(config.N, 2) + 1, lower_E:upper_E]
 
     # Calculation of Spectrum of Photons captured along the x-direction 
     spectrum_p = Array{Float64,2}(undef, config.N, tdata.No_points)
     for j in 1:config.N
         spectrum_p[j, :] = abs.(fftshift(ifft(ifftshift(psi_p[j, :])))).^2
     end
-    A_out_2 = copy(spectrum_p)
+    A_out_2 = spectrum_p[div(config.N, 2) + 1, lower_E:upper_E]
 
     Transmittivity = A_out_2 ./ A_in_2
 
@@ -131,13 +134,16 @@ function run_simulation(config::Parameters = default_config())
     pump_spatial = pump_spatial_profile(derived, grid)
     println("✓ Pump spatial profile computed")
 
-    println("Computing transmittivity spectrum")
+    println("Computing transmission spectrum")
     Transmittivity = propagate_pump_spectrum(config, derived, grid, pump_spatial, tdata, pump_time)
-    println("✓ Transmittivity spectrum computed")
+    println("✓ Transmission spectrum computed")
 
     println("\n" * "=" ^ 60)
     println("Simulation completed successfully!")
     println("=" ^ 60)
 
-    return (Transmittivity=Transmittivity, EnergyAxis=tdata.E_axis)
+    lower_E = findlast(x -> x < config.hbar_omega_x - 30, tdata.E_axis)
+    upper_E = findfirst(x -> x > config.hbar_omega_x + 30, tdata.E_axis)
+
+    return (TransmissionSpectrum=Transmittivity, EnergyAxis=tdata.E_axis[lower_E:upper_E])
 end

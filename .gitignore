@@ -1,3 +1,5 @@
 Manifest.toml
 *.tmp
 *.log
+*.venv
+__pycache__/

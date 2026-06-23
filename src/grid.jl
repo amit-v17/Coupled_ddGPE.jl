@@ -54,10 +54,6 @@ function temporal_axes(config::Parameters, derived::DerivedParameters)::TimeData
     # Energy Axis in Dimensional Parameters
     E_axis = ((2π .* f) .* config.hbar_gamma_c .+ config.hbar_omega_pump)
 
-    # lower_E = findlast(x -> x < 1618, E_axis)
-    # upper_E = findfirst(x -> x > 1674, E_axis)
-    # println(lower, " ", upper)
-
     return TimeData(
         dt,
         steps,
