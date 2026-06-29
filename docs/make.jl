@@ -10,7 +10,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Julia Package Reference" => "api.md",
-        "REST API Reference" => "api_reference.md",
+        "REST API Reference" => "api-reference.md",
     ],
 )
 

@@ -16,7 +16,8 @@ Usage notes:
 - `config.g_s`: saturation interaction strength.
 
 # Returns
-- `Transmittivity::Matrix{Float64}` — the transmission intensity spectrum values for a given pulse.
+- `TransmissionSpectrum::Vector{Float64}` — the transmission intensity spectrum values for a given pulse.
+- `EnergyAxis::Vector{Float64}` — the corresponding energy axis in meV for the transmission spectrum.
 """
 function propagate_pump_spectrum(config::Parameters, 
     derived::DerivedParameters, 
