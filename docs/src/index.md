@@ -46,3 +46,8 @@ arrays and scalar metadata you can inspect or save for later analysis.
 If you'd like runnable examples in the docs, I can add an `examples/` folder and a simple script that
 reproduces common figures or a basic transmittivity scan. Also happy to extend the API reference with
 type signatures and example return-object fields if you want more precise, machine-readable docs.
+
+## REST API
+
+The FastAPI service reference (endpoints, auth header flow, custom 422 shape, examples, rate limits,
+and pagination behavior) is available in [docs/src/api-reference.md](./api-reference.md).

@@ -35,12 +35,20 @@ function main()
 
     result = nothing
 
+    # Run the simulation and stop the output from being printed to stdout
     redirect_stdout(devnull) do
         result = run_simulation(params)
     end
 
-    data = Dict(pairs(result))
-    JSON3.write(stdout, data)
+    # Convert the data array result to a dictionary for JSON serialization
+    data_array = Dict(pairs(result))
+
+    # Prepare the data points from the data array result for JSON output
+    data_points = Dict(
+    "data_points" => [Dict("Energy" => xi, "Transmission" => yi) for (xi, yi) in zip(data_array[:EnergyAxis], data_array[:TransmissionSpectrum])]
+    )
+
+    JSON3.write(stdout, data_points) # Output the data points as JSON to stdout
 
     return nothing
 end

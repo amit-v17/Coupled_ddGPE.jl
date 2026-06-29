@@ -19,3 +19,7 @@ pump_time_profile
 propagate_pump_spectrum
 run_simulation
 ```
+
+## REST API Reference
+
+For the FastAPI HTTP interface used by external clients, see [docs/src/api-reference.md](./api-reference.md).

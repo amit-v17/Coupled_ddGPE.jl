@@ -2,4 +2,6 @@ Manifest.toml
 *.tmp
 *.log
 *.venv
+*.env
 __pycache__/
+*.db

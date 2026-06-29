@@ -105,6 +105,53 @@ using Pkg
 Pkg.test()
 ```
 
+## REST API Quickstart
+
+This repository also includes a FastAPI service in [api/app.py](api/app.py) that lets you run simulations over HTTP.
+
+Start the API server from the repository root:
+
+```bash
+uvicorn api.app:app --reload
+```
+
+OpenAPI docs:
+
+- Swagger UI: `/docs`
+- OpenAPI JSON: `/openapi.json`
+
+Authentication:
+
+- Protected endpoints require the `api-key` header.
+- Example:
+
+```bash
+curl -X POST "http://localhost:8000/run_simulation" \
+	-H "Content-Type: application/json" \
+	-H "api-key: YOUR_API_KEY" \
+	-d '{}'
+```
+
+Main workflow:
+
+1. POST `/run_simulation` to create a job.
+2. Read `job_id` from the response.
+3. GET `/simulation_status/{job_id}` until status is `completed` or `failed`.
+4. Add `?include_data_points=true` to fetch computed points.
+
+Error behavior:
+
+- The API uses a custom 422 validation response shape (not default FastAPI validation payloads).
+- 401 means missing or invalid API key.
+- 404 means unknown simulation id.
+
+Rate limits and pagination:
+
+- No server-side rate limiting is currently enforced.
+- `data_points` are not paginated; all points are returned when requested.
+
+For full endpoint details and examples, see [docs/api-reference.md](docs/api-reference.md).
+
 ## Contributing
 
 Contributions are welcome. If you plan to add features or change defaults, please:

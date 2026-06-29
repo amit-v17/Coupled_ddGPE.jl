@@ -9,7 +9,8 @@ makedocs(
     modules = [Coupled_ddGPE],
     pages = [
         "Home" => "index.md",
-        "API Reference" => "api.md",
+        "Julia Package Reference" => "api.md",
+        "REST API Reference" => "api_reference.md",
     ],
 )
 
